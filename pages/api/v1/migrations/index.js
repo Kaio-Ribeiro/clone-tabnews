@@ -6,7 +6,7 @@ async function migrations(request, response) {
   const allowedMethods = ["GET", "POST"];
 
   if (!allowedMethods.includes(request.method)) {
-    response.status(405).json({
+    return response.status(405).json({
       error: `Method '${request.method}' not allowed`,
     });
   }
@@ -27,7 +27,7 @@ async function migrations(request, response) {
     if (request.method === "GET") {
       const pendingMigrations = await migrationRunner(defaultMigrationOptions);
 
-      response.status(200).json(pendingMigrations);
+      return response.status(200).json(pendingMigrations);
     }
 
     if (request.method === "POST") {
@@ -37,10 +37,10 @@ async function migrations(request, response) {
       });
 
       if (migratedMigrations.length > 0) {
-        response.status(201).json(migratedMigrations);
+        return response.status(201).json(migratedMigrations);
       }
 
-      response.status(200).json(migratedMigrations);
+      return response.status(200).json(migratedMigrations);
     }
   } catch (error) {
     console.error(error);
